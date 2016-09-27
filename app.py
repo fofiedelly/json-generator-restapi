@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 from invalid_usage import InvalidUsage
+import json
 
 app = Flask(__name__)
 
+authorized_types = ["text", "int", "double", "char"]
 
 def read_file_content():
 	f = open('lorem.txt')
@@ -18,7 +20,10 @@ def app_start():
 	content = read_file_content()
 	if not request.is_json:
 		raise InvalidUsage('You need to give a schema', status_code=410)
-	return '%s' % content
+	schema = request.get_json()
+	for key, value in schema.iteritems():
+		print key, value
+	return '%s' % "hello world" #% request.get_json()
 
 
 @app.errorhandler(InvalidUsage)
